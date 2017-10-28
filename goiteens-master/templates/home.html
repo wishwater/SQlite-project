@@ -5,7 +5,7 @@
 </head>
 <body>
 {%if context:%}
-	<p>HELL0 {{context.first_name}} {{context.last_name}} !!!)))</p>
+	<p>HELL0 {{context.user.first_name}} {{context.user.last_name}} !!!)))</p>
 {%else%}
 	<p>HELL0 Unknown ((((</p>
 {%endif%}
