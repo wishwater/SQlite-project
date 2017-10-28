@@ -56,7 +56,6 @@ def logout():
 # описуємо домашній роут
 # сіда зможуть попадати тільки GET запроси
 @app.route('/')
-@login_required
 def home():
     context = {}
     if session.get('username', None):
@@ -64,8 +63,22 @@ def home():
         # якщо в сесії є username тоді дістаємо його дані
         # добавляємо їх в словник для передачі в html форму
         context['user'] = user
+    else:
+        return redirect(url_for('login'))
     return render_template('home.html', context=context)
 
+@app.route('/nickname', methods=["GET", "POST"])
+def nickname():
+    if request.method == 'POST':
+        # якщо метод пост дістаємо дані з форми і звіряємо чи є такий користвач в базі данних
+        # якшо є то в дану сесію добавляєм ключ username
+        # і перекидаємо користувача на домашню сторінку
+        user = UserManager()
+        if user.loginUser(request.form):
+            addToSession(user)
+            return redirect(url_for('home'))
+
+    return render_template('nickname.html')
 
 def addToSession(user):
     session['username'] = user.user.nickname
@@ -83,6 +96,7 @@ def registr():
         if context['Error']:
             return render_template('registration.html', context=context)
         if user.addNewUser():
+            UserManager.load_models[user.user.nickname] = user
             addToSession(user)
             return redirect(url_for('home'))
 
