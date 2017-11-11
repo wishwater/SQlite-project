@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+{%if context:%}
+	<h1>Your Information Is</h1>
+	<p>NickName:{{context.user.nickname}}</p>
+	<p>First Name:{{context.user.first_name}}</p>
+	<p>Last Name:{{context.user.last_name}}</p>
+	<p>Email:{{context.user.email}}</p>
+{%else%}
+	<p>HELL0 Unknown ((((</p>
+{%endif%}
+</body>
+</html>

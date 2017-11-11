@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+{%if context.Error:%}
+     {%for error in context.Error %}
+    <h2>{{error}}</h2>
+     {%endfor%}
+{%endif%}
+<form action="/registration" method="POST">
+    Last Name:<br>
+  <input type="text" name="last_name" value="">
+    <br>
+    First Name:<br>
+  <input type="text" name="first_name" value="">
+    <br>
+    Nickname:<br>
+  <input type="text" name="nickname" value="">
+    <br>
+  Email:<br>
+  <input type="text" name="email" value="">
+  <br>
+  Passw1:<br>
+  <input type="text" name="passw1" value="">
+    <br>
+  Passw2:<br>
+  <input type="text" name="passw2" value="">
+  <br><br>
+  <input type="submit" value="registr">
+</form>
+</body>
+</html>
