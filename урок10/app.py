@@ -56,6 +56,7 @@ def add_friend():
     id = int(request.args.get('id',0))
     user = UserManager.load_models[session['username']]
     user.add_friend(id=id)
+    sql = 'INSERT INTO friends (personid, friendid) VALUES (7, 8);'
     return redirect(request.referrer)
 
 @app.route('/<nickname>',methods=['GET'])
@@ -90,6 +91,16 @@ def home():
 def addToSession(user):
     session['username'] = user.object.nickname
 
+@app.route('/edit', methods=["GET", "POST"])
+def edit():
+    context = {'Error': []}
+    if request.method == 'POST':
+        user = UserManager().getModelFromForm(request.form)
+        if user.save():
+            UserManager.load_models[user.object.nickname] = user
+            addToSession(user)
+            return redirect(url_for('home'))
+    return render_template('edit.html', context=context)
 
 @app.route('/registration', methods=["GET", "POST"])
 def registr():
