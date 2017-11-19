@@ -3,7 +3,47 @@
 
 {% block content %}
 {%if context:%}
-	<p>HELL0 {{context.user.object.first_name}} {{context.user.object.last_name}} !!!)))</p>
+<style>
+body{
+	text-transform: capitalize;
+	text-align: center;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+		font-size:20px;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+	<div class="container-fluid">
+   <div class="row">
+		 <div class="col-lg-4 col-md-3 col-sm-1"></div>
+		 <div class="col-lg-4 col-md-6 col-sm-10">
+			 <h1>Your Info {{session.username}}</h1>
+			 <table>
+				 <tr><th>Last Name</th><td>{{context.user.object.last_name}}</td></tr>
+				 <tr><th>First Name</th><td>{{context.user.object.first_name}}</td></tr>
+				 <tr><th>NickName</th><td>{{context.user.object.nickname}}</td></tr>
+				 <tr><th>Email</th><td>{{context.user.object.email}}</td></tr>
+				 <tr><th>Password</th><td>{{context.user.object.password}}</td></tr>
+				 <tr><th>Create Time</th><td>{{context.user.object.create_time}}</td></tr>
+				 <tr><th>Description</th><td>{{context.user.object.descr}}</td></tr>
+			 </table>
+		 </div>
+		 <div class="col-lg-4 col-md-3 col-sm-1"></div>
+	 </div>
+	</div>
 {%else%}
 	<p>HELL0 Unknown ((((</p>
 {%endif%}

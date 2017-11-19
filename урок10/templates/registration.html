@@ -9,26 +9,32 @@
     <h2>{{error}}</h2>
      {%endfor%}
 {%endif%}
-<form action="/registration" method="POST">
-    Last Name:<br>
-  <input type="text" name="last_name" value="">
-    <br>
-    First Name:<br>
-  <input type="text" name="first_name" value="">
-    <br>
-    Nickname:<br>
-  <input type="text" name="nickname" value="">
-    <br>
-  Email:<br>
-  <input type="text" name="email" value="">
-  <br>
-  Passw1:<br>
-  <input type="text" name="passw1" value="">
-    <br>
-  Passw2:<br>
-  <input type="text" name="passw2" value="">
-  <br><br>
-  <input type="submit" value="registr">
-</form>
+<div class="form-group">
+	<form action="/registration" method="POST">
+	    Last Name:<br>
+	  <input type="text" name="last_name" value="">
+	    <br>
+	    First Name:<br>
+	  <input type="text" name="first_name" value="">
+	    <br>
+	    Nickname:<br>
+	  <input type="text" name="nickname" value="">
+			<br>
+		Description:<br>
+		  <textarea class="form-control" rows="5" name="descr"></textarea>
+			<input type="text" name="descr" value="">
+	    <br>
+	  Email:<br>
+	  <input type="text" name="email" value="">
+	  <br>
+	  Passw1:<br>
+	  <input type="text" name="passw1" value="">
+	    <br>
+	  Passw2:<br>
+	  <input type="text" name="passw2" value="">
+	  <br><br>
+	  <input type="submit" value="registr">
+	</form>
+</div>
 </body>
 </html>
