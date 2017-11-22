@@ -22,6 +22,7 @@ class UserManager(SNBaseManager):
         self.object.type = self.user_type
         self.object.email = form.get('email', '')
         self.object.nickname = form.get('nickname', '')
+        self.object.descr = form.get('descr', '')
         if form.get('passw1', '') == form.get('passw2', ''):
             self.object.password = form.get('passw1', '')
         return self

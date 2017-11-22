@@ -108,7 +108,7 @@ def registr():
     if request.method == 'POST':
         user = UserManager().getModelFromForm(request.form)
         if user.check_user():
-            context['Error'].append('wrong name or email')
+            context['Error'].append('wrong nickname or email')
         if not user.object.password:
             context['Error'].append('incorrect password')
         if context['Error']:
