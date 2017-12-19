@@ -5,14 +5,14 @@ from schematics.models import Model
 from schematics.types import StringType, EmailType, BooleanType, IntType, ListType, ModelType, DateTimeType
 from .my_types import One2One
 
-
+#type for user
 class UserType(Model):
     _name = 'user_type'
     id = IntType(required=False)
     type_name = StringType(required=True)
     create_time = DateTimeType(required=True, default=datetime.now())
 
-
+#class for adding user in db
 class UserAddModel(Model):
     _name = 'users_add'
     id = IntType(required=False)
@@ -22,7 +22,7 @@ class UserAddModel(Model):
     address = StringType(default=None, required=False)
     sex = IntType(default=None, required=False)
 
-
+#user and his abilities
 class UserModel(Model):
     _name = 'users'
     id = IntType(required=False)
@@ -38,7 +38,7 @@ class UserModel(Model):
     create_time = DateTimeType(required=True, default=datetime.now())
     user_add = One2One(UserAddModel)
 
-
+#interaction with 2 users
 class UserRelation(Model):
     _name = 'user_relation'
     id = IntType(required=False)
@@ -47,14 +47,14 @@ class UserRelation(Model):
     block = IntType(required=True, default=0)
     create_time = DateTimeType(required=True, default=datetime.now())
 
-
+#class for group and her abilities
 class GroupUserModel(Model):
     id = IntType(required=False)
     group = ModelType(UserModel, required=True)
     user = ModelType(UserModel, required=True)
     create_time = DateTimeType(required=True, default=datetime.now())
 
-
+#class for post and its abilities
 class PostModel(Model):
     id = IntType(required=False)
     title = StringType(required=True)
@@ -64,7 +64,7 @@ class PostModel(Model):
     user = ModelType(UserModel, required=True)
     create_time = DateTimeType(required=True, default=datetime.now())
 
-
+#class for comment and its abilities
 class CommentsModel(Model):
     id = IntType(required=False)
     text = StringType(required=False, default=None)
@@ -72,14 +72,14 @@ class CommentsModel(Model):
     user = ModelType(UserModel, required=True)
     create_time = DateTimeType(required=True, default=datetime.now())
 
-
+#class for comment under post and its abilities(idefentication number,to what post does it belong)
 class PostCommentModel(Model):
     id = IntType(required=False)
     post = ModelType(PostModel, required=True)
     comment = ModelType(CommentsModel, required=True)
     create_time = DateTimeType(required=True, default=datetime.now())
 
-
+#class for Message and its abilities
 class MessageModel(Model):
     id = IntType(required=False)
     user_from = ModelType(UserModel, required=True)
