@@ -3,6 +3,7 @@ from flask import Flask, request, render_template, redirect, url_for, session
 from models.executeSqlite3 import executeSelectOne, executeSelectAll, executeSQL
 from functools import wraps
 from models.user_manager import UserManager
+from models.user_friend_manager import UserRelationManager
 import os
 
 # створюємо головний об'єкт сайту класу Flask
@@ -51,21 +52,46 @@ def logout():
         del session['username']
     return redirect(url_for('login'))
 
-@app.route('/add_friend', methods=['GET'])
+@app.route('/add_friend', methods=["GET","POST"])
 def add_friend():
-    id = int(request.args.get('id',0))
-    user = UserManager.load_models[session['username']]
-    user.add_friend(id=id)
-    sql = 'INSERT INTO friends (personid, friendid) VALUES (7, 8);'
-    return redirect(request.referrer)
+    if request.method == 'POST':
+        user_nickname = session['username']
+        user = UserManager()
+        print('ok1')
+        if user.SelectUser(user_nickname):
+            user_id = user.object.id
+            print('ok1.5')
+        friend_nickname = request.form['friend_nickname']
+        print(friend_nickname)
+        friend = UserManager()
+        print('ok2')
+        if friend.SelectUser(friend_nickname):
+            friend_id = friend.object.id
+            print('ok2.5')
+        friend = UserRelationManager()
+        if user_id and friend_id:
+            friend.addFriend(user_id , friend_id)
+            print(user_id,friend_id)
+    else:
+        render_template('home.html')
 
-@app.route('/<nickname>',methods=['GET'])
+
+@app.route('/friends_view',methods = ["GET","POST"])
+@login_required
+def view():
+    nickname = session['username']
+    print(nickname)
+
+@app.route('/<nickname>',methods=["GET","POST"])
 @login_required
 def user_page(nickname):
     context = {}
     if session.get('username', None):
         user = UserManager.load_models[session['username']]
         context['loginUser'] = user
+
+    if request.method == "POST":
+        nickname = request.form.get('nickname')
 
     selectUser = UserManager()
     selectUser.select().And([('nickname','=',nickname)]).run()
@@ -93,12 +119,15 @@ def addToSession(user):
 
 @app.route('/edit', methods=["GET", "POST"])
 def edit():
-    context = {'Error': []}
+    nickname = session['username']
+    context = {}
+    user = UserManager()
+    if user.SelectUser(nickname):
+            context['user'] = user
     if request.method == 'POST':
-        user = UserManager().getModelFromForm(request.form)
+        user = user.getModelFromForm(request.form)
         if user.save():
-            UserManager.load_models[user.object.nickname] = user
-            addToSession(user)
+            context['user'] = user
             return redirect(url_for('home'))
     return render_template('edit.html', context=context)
 

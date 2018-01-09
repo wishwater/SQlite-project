@@ -47,27 +47,27 @@
 					    </ul>
 					  </div>
 					</nav>
-					<form action="/registration" method="POST">
+					<form action="/edit" method="POST">
 					    Last Name:<br>
-					  <input type="text" name="last_name" value="" class="form-control">
+					  <input type="text" name="last_name" value="{{context.user.object.last_name}}" class="form-control">
 					    <br>
 					    First Name:<br>
-					  <input type="text" name="first_name" value="" class="form-control">
+					  <input type="text" name="first_name" value="{{context.user.object.first_name}}" class="form-control">
 					    <br>
 					    Nickname:<br>
-					  <input type="text" name="nickname" value="" class="form-control">
+					  <input type="text" name="nickname" value="{{context.user.object.nickname}}" class="form-control">
 					    <br>
 					  Email:<br>
-					  <input type="text" name="email" value="" class="form-control">
+					  <input type="text" name="email" value="{{context.user.object.email}}" class="form-control">
 					  <br>
 					  Passw1:<br>
-					  <input type="text" name="passw1" value="" class="form-control">
+					  <input type="text" name="passw1" value="{{context.user.object.password}}" class="form-control">
 					    <br>
 					  Passw2:<br>
-					  <input type="text" name="passw2" value="" class="form-control">
+					  <input type="text" name="passw2" value="{{context.user.object.password}}" class="form-control">
 					  <br>
-						<label for="comment">About:</label>
-						<textarea class="form-control" rows="5" id="comment"></textarea>
+						About:
+						<textarea class="form-control" rows="5" name="descr" value="{{context.user.object.descr}}"></textarea>
 					  <button type="submit" class="btn btn-info">Save Changes</button>
 						<button type="submit" class="btn">Cancel</button>
 					</form>

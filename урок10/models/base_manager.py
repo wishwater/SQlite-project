@@ -51,6 +51,9 @@ class SNBaseManager():
         print(sql)
         return executeSQL(sql)
 
+    def update(self):
+        sql = self.update_sql.format(self.object._name, self._sqlValues(self.update_sql_set), self.object.id)
+
     def delete(self):
         return BoolWhereDelete(self)
 

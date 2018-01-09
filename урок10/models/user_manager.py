@@ -55,7 +55,12 @@ class UserManager(SNBaseManager):
             return True
         return False
 
-
+    def SelectUser(self,nickname):
+        self.select().And([('nickname','=',nickname)]).run()
+        if self.object.id:
+            self.load_models[self.object.nickname] = self
+            return True
+        return False
 
 if __name__ == '__main__':
     manager = UserManager()
