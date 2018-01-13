@@ -16,44 +16,46 @@ class UserRelationManager(SNBaseManager):
             return
         if self.getFriend(user, friend):
             return
-        self.object.user = user
-        self.object.friend = friend
+        self.object.user1 = user
+        self.object.user2 = friend
 
-        return self.saveFriends(user,friend)
+        return self.saveFriends()
 
-    def saveFriends(self, user, friend):
+    def saveFriends(self):
         sql = self.insert_sql.format(self.object._name, self._sqlValues(self.insert_sql_values))
-        return "ok"
+        return self._executeSQL(sql)
+        return('ok')
 
     def delFriend(self, user, friend):
         if not (isinstance(user, int) and isinstance(friend, int)):
             return
 
-        return self.delete().And([('user','=',user),('friend','=',friend)])\
-            .Or([('user','=',friend),('friend','=',user)]).run()
+        return self.delete().And([('user1','=',user),('user2','=',friend)])\
+            .Or([('user1','=',friend),('user2','=',user)]).run()
 
     def getFriends(self, user):
         if not isinstance(user, int):
             return
 
-        return self.select().And([('user','=',user)]).Or([('friend','=',user)]).run()
+        return self.select().And([('user1','=',user)]).Or([('user2','=',user)]).run()
 
     def getFriend(self, user, friend):
         if not (isinstance(user, int) and isinstance(friend, int)):
             return
 
-        return self.select().And([('user', '=', user), ('friend', '=', friend)]) \
-            .Or([('user', '=', friend), ('friend', '=', user)]).run()
-
+        return self.select().And([('user1', '=', user), ('user2', '=', friend)]) \
+            .Or([('user1', '=', friend), ('user2', '=', user)]).run()
 
     def isFriend(self, user, friend):
         if not (isinstance(user, int) and isinstance(friend, int)):
             return
 
-        data = self.select().And([('user', '=', user), ('friend', '=', friend)]) \
-            .Or([('user', '=', friend), ('friend', '=', user)]).run()
+        self.select().And([('user1', '=', user), ('user2', '=', friend)]) \
+            .Or([('user1', '=', friend), ('user2', '=', user)]).run()
 
-        if data:
+        print(self.object)
+        print(self.object.id)
+        if self.object.id:
             return True
         return False
 

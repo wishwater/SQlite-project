@@ -59,4 +59,21 @@ tr:nth-child(even) {
 {%endif%}
 {% endblock %}
 
+{% block search_friend%}
+{%if context.user.object.id == context.loginUser.object.id%}
+<h1>Search your Friend.</h1>
+<form action = "/find_friend" method="POST">
+	<input name = "friend_nickname" placeholder = "Nickname of Friend">
+	<button type="submit" value = "submit" class="btn btn-info">Search</button>
+</form>
+
+<!--{% if context.Error %}
+
+<h1>{{error}}</h1>
+
+{% endif %}-->
+
+{% endif %}
+{% endblock %}
+
 

@@ -39,8 +39,6 @@ def login():
 
     return render_template('login.html')
 
-
-
 # описуємо роут для вилогінення
 # сіда зможуть попадати тільки GET запроси
 @app.route('/logout')
@@ -53,34 +51,67 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/add_friend', methods=["GET","POST"])
+@login_required
 def add_friend():
     if request.method == 'POST':
         user_nickname = session['username']
         user = UserManager()
-        print('ok1')
         if user.SelectUser(user_nickname):
             user_id = user.object.id
-            print('ok1.5')
         friend_nickname = request.form['friend_nickname']
-        print(friend_nickname)
         friend = UserManager()
-        print('ok2')
         if friend.SelectUser(friend_nickname):
             friend_id = friend.object.id
-            print('ok2.5')
         friend = UserRelationManager()
         if user_id and friend_id:
             friend.addFriend(user_id , friend_id)
-            print(user_id,friend_id)
+            return('ok')
+        return('!ok')
     else:
         render_template('home.html')
+
+@app.route('/find_friend', methods = ["GET","POST"])
+@login_required
+def find_friend():
+    if request.method == 'POST':
+        user_nickname = session['username']
+        user = UserManager()
+        if user.SelectUser(user_nickname):
+            user_id = user.object.id
+        friend_nickname = request.form['friend_nickname']
+        friend = UserManager()
+        if friend.SelectUser(friend_nickname):
+            friend_id = friend.object.id
+        friend = UserRelationManager()
+        if user_id and friend_id:
+            print('ok')
+            IsItYourFriend = friend.isFriend(user_id , friend_id)
+            print(IsItYourFriend)
+            if IsItYourFriend == True:
+                print('ok1.5')
+                return redirect(url_for('user_page', nickname = friend_nickname))
+            else:
+                #context = {'Error': []}
+               # context['Error:'].append("you don't have friend with that nickname")
+                render_template('find_friend error.html')
+                return("you do not have friends with this nickname")
 
 
 @app.route('/friends_view',methods = ["GET","POST"])
 @login_required
 def view():
-    nickname = session['username']
-    print(nickname)
+    friends = {}
+    user_nickname = session['username']
+    print(user_nickname)
+    user = UserManager()
+    print('ok1')
+    if user.SelectUser(user_nickname):
+        user_id = user.object.id
+        print(user_id)
+        print('ok1.5')
+    user = UserRelationManager()
+    friends = user.getFriends(user_id)
+    print(friends)
 
 @app.route('/<nickname>',methods=["GET","POST"])
 @login_required
@@ -118,6 +149,7 @@ def addToSession(user):
     session['username'] = user.object.nickname
 
 @app.route('/edit', methods=["GET", "POST"])
+@login_required
 def edit():
     nickname = session['username']
     context = {}

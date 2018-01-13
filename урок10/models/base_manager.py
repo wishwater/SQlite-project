@@ -49,6 +49,9 @@ class SNBaseManager():
         else:
             sql = self.insert_sql.format(self.object._name, self._sqlValues(self.insert_sql_values))
         print(sql)
+        return self._executeSQL(sql)
+
+    def _executeSQL(self, sql):
         return executeSQL(sql)
 
     def update(self):
