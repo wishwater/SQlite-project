@@ -26,9 +26,14 @@ class UserRelationManager(SNBaseManager):
         return self._executeSQL(sql)
         return('ok')
 
-    def delFriend(self, user, friend):
+    def delFriend(self, user1, friend1):
+        friend = int(friend1)
+        user = int(user1)
         if not (isinstance(user, int) and isinstance(friend, int)):
+            print('del&')
             return
+
+        print('del1')
 
         return self.delete().And([('user1','=',user),('user2','=',friend)])\
             .Or([('user1','=',friend),('user2','=',user)]).run()
@@ -43,7 +48,7 @@ class UserRelationManager(SNBaseManager):
         if not (isinstance(user, int) and isinstance(friend, int)):
             return
 
-        return self.select().And([('user1', '=', user), ('user2', '=', friend)]) \
+        self.select().And([('user1', '=', user), ('user2', '=', friend)]) \
             .Or([('user1', '=', friend), ('user2', '=', user)]).run()
 
     def isFriend(self, user, friend):
@@ -59,10 +64,13 @@ class UserRelationManager(SNBaseManager):
             return True
         return False
 
-    def blockFriend(self,user, friend):
+    def blockFriend(self,user1, friend1):
+        friend = int(friend1)
+        user = int(user1)
         if not (isinstance(user, int) and isinstance(friend, int)):
             return
-
-        relation = self.getFriend(user,friend)
-        relation.object.block = 1
-        relation.save()
+        print(user,friend)
+        print('hello,misciu')
+        self.getFriend(user,friend)
+        self.object.block = 1
+        self.save()
