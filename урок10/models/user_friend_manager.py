@@ -16,8 +16,19 @@ class UserRelationManager(SNBaseManager):
             return
         if self.getFriend(user, friend):
             return
+
+        if self.object.block == 2:
+            print('okokokok')
+            self.object.user1 = user
+            self.object.user2 = friend
+            self.object.block = 0
+            return self.save()
+
+        print('!okko')
+
         self.object.user1 = user
         self.object.user2 = friend
+        self.object.block = 2
 
         return self.saveFriends()
 
