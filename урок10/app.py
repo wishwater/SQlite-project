@@ -73,22 +73,20 @@ def add_friend():
 @app.route('/find_friend', methods = ["GET","POST"])
 @login_required
 def find_friend():
-    if request.method == 'POST':
+    if request.method == 'GET':
         user_nickname = session['username']
         user = UserManager()
         if user.SelectUser(user_nickname):
             user_id = user.object.id
-        friend_nickname = request.form['friend_nickname']
+        friend_nickname = request.args['friend_nickname']
         friend = UserManager()
         if friend.SelectUser(friend_nickname):
             friend_id = friend.object.id
         friend = UserRelationManager()
         if user_id and friend_id:
-            print('ok')
             IsItYourFriend = friend.isFriend(user_id , friend_id)
             print(IsItYourFriend)
             if IsItYourFriend == True:
-                print('ok1.5')
                 return redirect(url_for('nickname', nickname = friend_nickname))
             else:
                 #context = {'Error': []}
@@ -132,18 +130,15 @@ def block_friend():
 
 @app.route('/friends_view',methods = ["GET","POST"])
 @login_required
-def view():
-    friends = {}
+def friends_view():
     user_nickname = session['username']
     print(user_nickname)
     user = UserManager()
-    print('ok1')
     if user.SelectUser(user_nickname):
         user_id = user.object.id
-        print(user_id)
-        print('ok1.5')
     user = UserRelationManager()
     friends = user.getFriends(user_id)
+    print(friends.object)
     print(friends)
 
 @app.route('/<nickname>',methods=["GET","POST"])
@@ -176,7 +171,6 @@ def home():
         context['user'] = user
         context['loginUser'] = user
     return render_template('home.html', context=context)
-
 
 def addToSession(user):
     session['username'] = user.object.nickname

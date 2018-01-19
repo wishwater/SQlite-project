@@ -62,7 +62,7 @@ tr:nth-child(even) {
 {% block search_friend%}
 {%if context.user.object.id == context.loginUser.object.id%}
 <h1>Search your Friend.</h1>
-<form action = "/find_friend" method="POST">
+<form action = "/find_friend">
 	<input name = "friend_nickname" placeholder = "Nickname of Friend">
 	<button type="submit" value = "submit" class="btn btn-info">Search</button>
 </form>
@@ -85,6 +85,13 @@ tr:nth-child(even) {
 {%endif%}
 {% endblock %}
 
+{% block friends_view%}
+{%if context.user.object.id == context.loginUser.object.id%}
+	<form action="/friends_view">
+	<br><button type="submit" class="btn btn-danger">view friend</button>
+	</form>
+{%endif%}
+{% endblock %}
 
 {% block block_friend%}
 {%if context.user.object.id != context.loginUser.object.id%}
