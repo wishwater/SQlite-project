@@ -70,8 +70,6 @@ class UserRelationManager(SNBaseManager):
         self.select().And([('user1', '=', user), ('user2', '=', friend)]) \
             .Or([('user1', '=', friend), ('user2', '=', user)]).run()
 
-        print(self.object)
-        print(self.object.id)
         if self.object.id:
             return True
         return False

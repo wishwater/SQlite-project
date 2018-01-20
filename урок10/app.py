@@ -85,7 +85,6 @@ def find_friend():
         friend = UserRelationManager()
         if user_id and friend_id:
             IsItYourFriend = friend.isFriend(user_id , friend_id)
-            print(IsItYourFriend)
             if IsItYourFriend == True:
                 return redirect(url_for('nickname', nickname = friend_nickname))
             else:
@@ -131,14 +130,20 @@ def block_friend():
 @app.route('/friends_view',methods = ["GET","POST"])
 @login_required
 def friends_view():
+    context = {}
+    if session.get('username', None):
+        user = UserManager.load_models[session['username']]
+        context['user'] = user
+        context['loginUser'] = user
+    friends_list = {}
     user_nickname = session['username']
     user = UserManager()
     if user.SelectUser(user_nickname):
         user_id = user.object.id
     friend = UserRelationManager()
     friends = friend.getFriends(user_id)
-    print(friends.object)
-    print(friends)
+    context['friends_list'] = friends
+    return render_template('home.html', context = context)
 
 @app.route('/<nickname>',methods=["GET","POST"])
 @login_required

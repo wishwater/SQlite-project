@@ -39,6 +39,12 @@ class UserManager(SNBaseManager):
         relationManager.getFriends(self.object.id)
         return relationManager.object
 
+    def SelectUser(self,nickname):
+        self.select().And([('nickname','=',nickname)]).run()
+        if self.object.id:
+            self.load_models[self.object.nickname] = self
+            return True
+        return False
 
     def check_user(self):
         if self.object.type.type_name == 'user':

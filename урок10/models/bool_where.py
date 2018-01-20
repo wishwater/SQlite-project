@@ -45,7 +45,7 @@ class BoolWhereSelect(BoolWhere):
         self.sql = self.select_sql_from.format(self.manager.object._name) + self.select_sql_where
 
     def run(self, all=False):
-        if all:
+        if not all:
             self.Limit(1)
         print(self.sql)
         return self.manager.fillModel(self.sql)

@@ -66,13 +66,6 @@ tr:nth-child(even) {
 	<input name = "friend_nickname" placeholder = "Nickname of Friend">
 	<button type="submit" value = "submit" class="btn btn-info">Search</button>
 </form>
-
-<!--{% if context.Error %}
-
-<h1>{{error}}</h1>
-
-{% endif %}-->
-
 {% endif %}
 {% endblock %}
 
@@ -85,11 +78,26 @@ tr:nth-child(even) {
 {%endif%}
 {% endblock %}
 
-{% block friends_view%}
+{% block friends_view_button%}
 {%if context.user.object.id == context.loginUser.object.id%}
 	<form action="/friends_view">
 	<br><button type="submit" class="btn btn-danger">view friend</button>
 	</form>
+{%endif%}
+{% endblock %}
+
+{% block friends_view%}
+{%if context.user.object.id == context.loginUser.object.id%}
+	{%if context.friends_list%}
+		<Table>
+		<tr><th>Your friends</th></tr>
+		{% for i in context.friends_list %}
+			<tr>
+				<td>{{i.nickname}}</td>
+			</tr>
+		{% endfor %}
+		</Table>
+	{%endif%}
 {%endif%}
 {% endblock %}
 
