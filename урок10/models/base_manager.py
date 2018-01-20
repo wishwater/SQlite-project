@@ -9,7 +9,6 @@ from .my_types import One2One
 
 
 
-
 class SNBaseManager():
     update_sql = 'UPDATE {} SET {} WHERE id = {}'
     update_sql_set = ' {0} = {1} '
@@ -49,10 +48,15 @@ class SNBaseManager():
         else:
             sql = self.insert_sql.format(self.object._name, self._sqlValues(self.insert_sql_values))
         print(sql)
-        return self._executeSQL(sql)
+        return self.executeSQL(sql)
 
-    def _executeSQL(self, sql):
+    def executeSQL(self, sql):
         return executeSQL(sql)
+
+    def executeSelect(self,sql):
+        cursor = BoolWhereSelect(self)
+        cursor.sql = sql
+        cursor.run()
 
     def update(self):
         sql = self.update_sql.format(self.object._name, self._sqlValues(self.update_sql_set), self.object.id)
@@ -88,11 +92,19 @@ class SNBaseManager():
                     resultd[atom.name] = data[atom.name]
             resultl.append(resultd)
 
-        if resultd:
+        if len(resultl) >= 1:
             self.object.import_data(resultd)
+        else:
+            for i, obj in enumerate(resultl):
+                self.object.import_data(obj)
+                resultl[i] = self.object
+            self.object = resultl
 
-    def select(self):
-        return BoolWhereSelect(self)
+
+    def select(self, sql=None):
+        if not sql:
+            sql = '1=1'
+        return BoolWhereSelect(self, sql)
 
 
 if __name__ == '__main__':

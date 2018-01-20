@@ -132,12 +132,11 @@ def block_friend():
 @login_required
 def friends_view():
     user_nickname = session['username']
-    print(user_nickname)
     user = UserManager()
     if user.SelectUser(user_nickname):
         user_id = user.object.id
-    user = UserRelationManager()
-    friends = user.getFriends(user_id)
+    friend = UserRelationManager()
+    friends = friend.getFriends(user_id)
     print(friends.object)
     print(friends)
 
