@@ -65,8 +65,8 @@ class UserManager(SNBaseManager):
         return False
 
     def get_user(self,id):
-        return self.select().And([('id', '=', str(id))]).run()
-
+        print(self.select().And([('id', '=', id)]).run())
+        return self.select().And([('id', '=', id)]).run()
 
 if __name__ == '__main__':
     manager = UserManager()

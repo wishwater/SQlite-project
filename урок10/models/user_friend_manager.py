@@ -18,13 +18,11 @@ class UserRelationManager(SNBaseManager):
             return
 
         if self.object.block == 2:
-            print('okokokok')
             self.object.user1 = user
             self.object.user2 = friend
             self.object.block = 0
             return self.save()
 
-        print('!okko')
 
         self.object.user1 = user
         self.object.user2 = friend
@@ -53,8 +51,9 @@ class UserRelationManager(SNBaseManager):
         if not isinstance(user, int):
             return
 
-        self.select().And([('user1','=',user)]).Or([('user2','=',user)]).run()
-        print(self.object.id)
+        all = True
+
+        self.select().And([('user1','=',user)]).Or([('user2','=',user)]).run(all)
 
     def getFriend(self, user, friend):
         if not (isinstance(user, int) and isinstance(friend, int)):

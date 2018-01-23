@@ -72,6 +72,8 @@ class SNBaseManager():
         resultl = []
         atoms = self.object.atoms()
         datal = executeSelectAll(sql)
+        print('kio')
+        print(datal)
         for data in datal:
             for atom in atoms:
                 if atom.field.typeclass == ModelType:
@@ -91,6 +93,8 @@ class SNBaseManager():
                 else:
                     resultd[atom.name] = data[atom.name]
             resultl.append(resultd)
+            print(resultd)
+            print('hohohohey')
 
         if len(resultl) == 1:
             self.object.import_data(resultd)

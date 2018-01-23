@@ -141,8 +141,22 @@ def friends_view():
     if user.SelectUser(user_nickname):
         user_id = user.object.id
     friend = UserRelationManager()
-    friends = friend.getFriends(user_id)
+    friend.getFriends(user_id)
+    friends = []
+    for i in friend.object:
+        friend_id = i.user2
+        print(friend_id)
+        print("ho")
+        USER2 = user.get_user(friend_id)
+        print(user.object)
+        print(USER2.object)
+        print("ho1")
+        friends[i] = USER2.nickname
+    print(friends)
+    print("ho3")
     context['friends_list'] = friends
+    print('hey')
+    print(context['friends_list'])
     return render_template('home.html', context = context)
 
 @app.route('/<nickname>',methods=["GET","POST"])
