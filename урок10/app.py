@@ -143,20 +143,13 @@ def friends_view():
     friend = UserRelationManager()
     friend.getFriends(user_id)
     friends = []
+    friend_nickname = UserManager()
     for i in friend.object:
         friend_id = i.user2
-        print(friend_id)
-        print("ho")
-        USER2 = user.get_user(friend_id)
-        print(user.object)
-        print(USER2.object)
-        print("ho1")
-        friends[i] = USER2.nickname
-    print(friends)
-    print("ho3")
+        friend_nickname.get_user(friend_id)
+        print(friend_nickname.object)
+        friends.append(friend_nickname.object.nickname)
     context['friends_list'] = friends
-    print('hey')
-    print(context['friends_list'])
     return render_template('home.html', context = context)
 
 @app.route('/<nickname>',methods=["GET","POST"])

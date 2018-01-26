@@ -1,3 +1,4 @@
+
 # -*- coding:utf-8 -*-
 from schematics.models import Model
 from schematics.types import ModelType
@@ -68,13 +69,11 @@ class SNBaseManager():
         return executeSQL(sql)
 
     def fillModel(self, sql):
-        resultd = {}
         resultl = []
-        atoms = self.object.atoms()
+        atoms = list(self.object.atoms())
         datal = executeSelectAll(sql)
-        print('kio')
-        print(datal)
         for data in datal:
+            resultd = {}
             for atom in atoms:
                 if atom.field.typeclass == ModelType:
                     man = SNBaseManager(atom.field.model_class)
@@ -92,18 +91,17 @@ class SNBaseManager():
                     resultd[atom.name] = atom.field.model_class().import_data(raw_data)
                 else:
                     resultd[atom.name] = data[atom.name]
-            resultl.append(resultd)
-            print(resultd)
-            print('hohohohey')
+            resultl.append(dict(resultd))
 
         if len(resultl) == 1:
-            self.object.import_data(resultd)
+            self.object.import_data(resultl[0])
         elif len(resultl) > 1:
+            result = []
             for i, obj in enumerate(resultl):
-                self.object.import_data(obj)
-                resultl[i] = self.object
-            self.object = resultl
-
+                model = self.object.__class__()
+                model.import_data(obj)
+                result.append(model)
+            self.object = result
 
 
     def select(self, sql=None):

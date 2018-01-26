@@ -93,7 +93,13 @@ tr:nth-child(even) {
 		<tr><th>Your friends</th></tr>
 		{% for i in context.friends_list %}
 			<tr>
-				<td>{{i.nickname}}</td>
+				<td>
+						<form method="GET" action="/find_friend">
+							<input type="name" class="form-control" name="friend_nickname" value="{{i}}" style="display:none">
+							<input type="submit" class="form-control" name="friend_nickname" value="{{i}}">
+						</form>
+					</a>
+				</td>
 			</tr>
 		{% endfor %}
 		</Table>
