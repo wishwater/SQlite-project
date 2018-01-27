@@ -67,6 +67,15 @@ class UserManager(SNBaseManager):
     def get_user(self,id):
         return self.select().And([('id', '=', id)]).run()
 
+    def save_group(self):
+        if self.object.id:
+            sql = self.update_sql.format(self.object._name, self._sqlValues(self.update_sql_set), self.object.id)
+        else:
+            sql = self.insert_sql.format(self.object._name, self._sqlValues(self.insert_sql_values))
+        self.object.type = 2
+        print(sql)
+        return self.executeSQL(sql)
+
 if __name__ == '__main__':
     manager = UserManager()
     manager.object.id = 1

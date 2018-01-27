@@ -34,6 +34,7 @@ def login():
         # і перекидаємо користувача на домашню сторінку
         user = UserManager()
         if user.loginUser(request.form):
+            print('hey')
             addToSession(user)
             return redirect(url_for('home'))
 
@@ -202,7 +203,7 @@ def edit():
     return render_template('edit.html', context=context)
 
 @app.route('/registration', methods=["GET", "POST"])
-def registr():
+def registration():
     context = {'Error': []}
     if request.method == 'POST':
         user = UserManager().getModelFromForm(request.form)
@@ -218,8 +219,22 @@ def registr():
             return redirect(url_for('home'))
 
         context['Error'].append('incorrect data')
-    return render_template('registration.html', context=context)
+    return render_template('registr.html', context=context)
 
+#@app.route('/registration_group', methods=["GET", "POST"])
+#def registration():
+#    context = {'Error': []}
+#    if request.method == 'POST':
+#        user = UserManager().getModelFromForm(request.form)
+#        if user.check_user():
+#            context['Error'].append('wrong Name or email')
+#        if context['Error']:
+#            return render_template('registration.html', context=context)
+#        if user.save_group:
+#            return redirect(url_for('home'))
+#
+#        context['Error'].append('incorrect data')
+#    return render_template('registration.html', context=context)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5034)
