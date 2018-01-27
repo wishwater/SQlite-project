@@ -1,4 +1,3 @@
-
 # -*- coding:utf-8 -*-
 from schematics.models import Model
 from schematics.types import ModelType
@@ -62,8 +61,10 @@ class SNBaseManager():
     def update(self):
         sql = self.update_sql.format(self.object._name, self._sqlValues(self.update_sql_set), self.object.id)
 
-    def delete(self):
-        return BoolWhereDelete(self)
+    def delete(self, sql=None):
+        if not sql:
+            sql = '1=1'
+        return BoolWhereDelete(self, sql)
 
     def _delete(self,sql):
         return executeSQL(sql)

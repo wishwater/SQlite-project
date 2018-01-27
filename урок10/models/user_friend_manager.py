@@ -32,14 +32,13 @@ class UserRelationManager(SNBaseManager):
 
     def saveFriends(self):
         sql = self.insert_sql.format(self.object._name, self._sqlValues(self.insert_sql_values))
-        return self._executeSQL(sql)
+        return self.executeSQL(sql)
         return('ok')
 
     def delFriend(self, user1, friend1):
         friend = int(friend1)
         user = int(user1)
         if not (isinstance(user, int) and isinstance(friend, int)):
-            print('del&')
             return
 
         print('del1')

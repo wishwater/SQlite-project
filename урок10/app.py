@@ -76,13 +76,19 @@ def add_friend():
 def find_friend():
     if request.method == 'GET':
         user_nickname = session['username']
+        print(user_nickname)
+        print('username')
         user = UserManager()
         if user.SelectUser(user_nickname):
             user_id = user.object.id
+            print('userid')
+            print(user_id)
         friend_nickname = request.args['friend_nickname']
         friend = UserManager()
         if friend.SelectUser(friend_nickname):
             friend_id = friend.object.id
+            print('friend_id')
+            print(friend_id)
         friend = UserRelationManager()
         if user_id and friend_id:
             IsItYourFriend = friend.isFriend(user_id , friend_id)
@@ -148,7 +154,6 @@ def friends_view():
     for i in friend.object:
         friend_id = i.user2
         friend_nickname.get_user(friend_id)
-        print(friend_nickname.object)
         friends.append(friend_nickname.object.nickname)
     context['friends_list'] = friends
     return render_template('home.html', context = context)
@@ -205,6 +210,12 @@ def edit():
 @app.route('/registration', methods=["GET", "POST"])
 def registration():
     context = {'Error': []}
+    if session.get('username') and request.method == 'GET':
+        nickname = session.get('username')
+        user = UserManager()
+        user.SelectUser(nickname)
+        context['user'] = user
+        return render_template('registr.html', context=context)
     if request.method == 'POST':
         user = UserManager().getModelFromForm(request.form)
         if user.check_user():
