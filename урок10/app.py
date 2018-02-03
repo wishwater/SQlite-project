@@ -4,6 +4,8 @@ from models.executeSqlite3 import executeSelectOne, executeSelectAll, executeSQL
 from functools import wraps
 from models.user_manager import UserManager
 from models.user_friend_manager import UserRelationManager
+
+from flask_mail import Mail, Message
 import os
 
 # створюємо головний об'єкт сайту класу Flask
@@ -13,6 +15,31 @@ app = Flask(__name__)
 # app.secret_key = os.urandom(24)
 app.secret_key = '125'
 
+app.config.update(
+	DEBUG=True,
+	#EMAIL SETTINGS
+	MAIL_SERVER='smtp.gmail.com',
+	MAIL_PORT=465,
+	MAIL_USE_SSL=True,
+	MAIL_USERNAME = 'hardanchukvasia@gmail.com',
+	MAIL_PASSWORD = '123456789o'
+	)
+mail = Mail(app)
+
+#mail = Mail(app)
+#app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+#app.config['MAIL_PORT'] = 587
+#app.config['MAIL_USE_TLS '] = True
+#app.config['MAIL_USERNAME '] = 'hardanchukvasia@gmail.com'
+#app.config['MAIL_PASSWORD '] = '123456789o'
+
+@app.route("/email")
+def email():
+    msg = Message("OHO PABOTAET",
+        sender="nikita.ogranchukggmail.com",
+        recipients=["hardanchukvasia@gmail.com"])
+    mail.send(msg)
+    return('ok')
 
 def login_required(f):
     @wraps(f)
@@ -22,6 +49,7 @@ def login_required(f):
                 return f(*args, **kwargs)
         return redirect(url_for('login'))
     return wrap
+
 
 
 # описуємо логін роут
