@@ -36,19 +36,9 @@ tr:nth-child(even) {
 	<tr><th>Description</th><td>{{context.user.object.descr}}</td></tr>
 </table>
 
-
 {%else%}
 	<p>HELL0 Unknown ((((</p>
 {%endif%}
-
-
-{% block mail %}
-
-<form action="/email">
-	<button type="submit" class="btn btn-info">Send</button>
-	</form>
-
-{% endblock %}
 
 {%if context.user.object.id != context.loginUser.object.id%}
 	<form method="POST" action="/add_friend">
@@ -56,6 +46,14 @@ tr:nth-child(even) {
 	<br><button type="submit" class="btn btn-danger" value = "{{context.user.object.nickname}}" >add friend</button>
 	</form>
 {%endif%}
+{% endblock %}
+
+{% block mail %}
+
+<form action="/email">
+	<button type="submit" class="btn btn-info">Send</button>
+	</form>
+
 {% endblock %}
 
 {% block search_user %}
@@ -99,7 +97,7 @@ tr:nth-child(even) {
 {%if context.user.object.id == context.loginUser.object.id%}
 	{%if context.friends_list%}
 		<Table>
-		<tr><th>Your friends</th></tr>
+		<tr><th>Your request for friends</th></tr>
 		{% for i in context.friends_list %}
 			<tr>
 				<td>
@@ -107,7 +105,6 @@ tr:nth-child(even) {
 							<input type="name" class="form-control" name="friend_nickname" value="{{i}}" style="display:none">
 							<input type="submit" class="form-control" name="friend_nickname" value="{{i}}">
 						</form>
-					</a>
 				</td>
 			</tr>
 		{% endfor %}
@@ -122,5 +119,33 @@ tr:nth-child(even) {
 		<input type="name" class="form-control" name="friend_id" value="{{context.user.object.id}}" style="display:none">
 	<br><button type="submit" class="btn btn-danger" value = "{{context.user.object.id}}" >block friend</button>
 	</form>
+{%endif%}
+{% endblock %}
+
+{% block friends_request%}
+{%if context.user.object.id == context.loginUser.object.id%}
+	{%if context.friends_request_list%}
+		<Table>
+		<tr><th>Your request for friends</th></tr>
+		{% for i in context.friends_request_list %}
+			<tr>
+				<td>
+						<form method="GET" action="/find_friend">
+							<input type="name" class="form-control" name="friend_nickname" value="{{i}}" style="display:none">
+							<input type="submit" class="form-control" name="friend_nickname" value="{{i}}">
+						</form>
+				</td>
+			</tr>
+		{% endfor %}
+		</Table>
+	{%endif%}
+{%endif%}
+{% endblock %}
+
+{% block upload_picture%}
+{%if context.user.object.id == context.loginUser.object.id%}
+	<form method="GET" action="/find_friend">
+		<input type="name" class="form-control" name="friend_nickname" value="{{i}}" style="display:none">
+		<input type="submit" class="form-control" name="friend_nickname" value="{{i}}">
 {%endif%}
 {% endblock %}

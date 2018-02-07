@@ -1,10 +1,9 @@
 # -*- coding:utf-8 -*-
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session , send_from_directory
 from models.executeSqlite3 import executeSelectOne, executeSelectAll, executeSQL
 from functools import wraps
 from models.user_manager import UserManager
 from models.user_friend_manager import UserRelationManager
-
 from flask_mail import Mail, Message
 import os
 
@@ -13,29 +12,30 @@ app = Flask(__name__)
 # добавляємо секретний ключ для сайту щоб шифрувати дані сессії
 # при кожнаму сапуску фласку буде генечитись новий рандомний ключ з 24 символів
 # app.secret_key = os.urandom(24)
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 app.secret_key = '125'
+
 
 app.config.update(
 	DEBUG=True,
 	#EMAIL SETTINGS
 	MAIL_SERVER='smtp.gmail.com',
-	MAIL_PORT=465,
-	MAIL_USE_SSL=True,
+	MAIL_PORT=587,
+	MAIL_USE_TLS=True,
 	MAIL_USERNAME = 'hardanchukvasia@gmail.com',
 	MAIL_PASSWORD = '123456789o'
 	)
 mail = Mail(app)
 
-#mail = Mail(app)
 #app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 #app.config['MAIL_PORT'] = 587
-#app.config['MAIL_USE_TLS '] = True
-#app.config['MAIL_USERNAME '] = 'hardanchukvasia@gmail.com'
-#app.config['MAIL_PASSWORD '] = '123456789o'
+#app.config['MAIL_USE_TLS'] = True
 
 @app.route("/email")
 def email():
-    msg = Message("OHO PABOTAET",
+    msg = Message("DA2",
         sender="nikita.ogranchukggmail.com",
         recipients=["hardanchukvasia@gmail.com"])
     mail.send(msg)
@@ -49,7 +49,6 @@ def login_required(f):
                 return f(*args, **kwargs)
         return redirect(url_for('login'))
     return wrap
-
 
 
 # описуємо логін роут
@@ -178,12 +177,24 @@ def friends_view():
     friend = UserRelationManager()
     friend.getFriends(user_id)
     friends = []
+    friends_request = []
     friend_nickname = UserManager()
+    print('ok1')
+    print('ok2')
     for i in friend.object:
         friend_id = i.user2
         friend_nickname.get_user(friend_id)
-        friends.append(friend_nickname.object.nickname)
+        if i.block == 2 or i.block == 1:
+            print('/ok')
+            print(friend_nickname.object)
+            friends_request.append(friend_nickname.object.nickname)
+        else:
+            print('ok')
+            print(friend_nickname.object)
+            friends.append(friend_nickname.object.nickname)
+        print(friends)
     context['friends_list'] = friends
+    context['friends_request_list'] = friends_request
     return render_template('home.html', context = context)
 
 @app.route('/<nickname>',methods=["GET","POST"])
@@ -216,6 +227,12 @@ def home():
         context['user'] = user
         context['loginUser'] = user
     return render_template('home.html', context=context)
+
+@app.route('/request_friend')
+@login_required
+def request_friend(user_id):
+    friend_request = True
+    return friends_view(friend_request)
 
 def addToSession(user):
     session['username'] = user.object.nickname
@@ -274,6 +291,31 @@ def registration():
 #
 #        context['Error'].append('incorrect data')
 #    return render_template('registration.html', context=context)
+
+@app.route("/upload_files")
+def index():
+    return render_template("upload.html")
+
+@app.route("/upload", methods=['POST'])
+def upload():
+    target = os.path.join(APP_ROOT, 'images/')
+    print(target)
+    if not os.path.isdir(target):
+        os.mkdir(target)
+
+    for file in request.files.getlist("file"):
+        print(file)
+        filename = file.filename
+        destination = "/".join([target, filename])
+        print(destination)
+        print(filename)
+        file.save(destination)
+
+    return render_template("complete.html" , image_name = filename)
+
+@app.route('/upload/<filename>')
+def send_image(filename):
+    return send_from_directory("images" , filename)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5034)

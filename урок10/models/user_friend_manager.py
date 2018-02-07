@@ -80,5 +80,8 @@ class UserRelationManager(SNBaseManager):
         print(user,friend)
         print('hello,misciu')
         self.getFriend(user,friend)
-        self.object.block = 1
+        if self.object.block == 0:
+            self.object.block = 1
+        else:
+            self.object.block = 0
         self.save()
