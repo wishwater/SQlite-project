@@ -41,8 +41,6 @@ class UserRelationManager(SNBaseManager):
         if not (isinstance(user, int) and isinstance(friend, int)):
             return
 
-        print('del1')
-
         return self.delete().And([('user1','=',user),('user2','=',friend)])\
             .Or([('user1','=',friend),('user2','=',user)]).run()
 

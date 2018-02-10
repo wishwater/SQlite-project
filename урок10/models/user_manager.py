@@ -67,6 +67,14 @@ class UserManager(SNBaseManager):
     def get_user(self,id):
         return self.select().And([('id', '=', id)]).run()
 
+    def save(self):
+        if self.object.id:
+            sql = self.update_sql.format(self.object._name, self._sqlValues(self.update_sql_set), self.object.id)
+        else:
+            sql = self.insert_sql.format(self.object._name, self._sqlValues(self.insert_sql_values))
+        print(sql)
+        return self.executeSQL(sql)
+
     def save_group(self):
         print('hey group')
         if self.object.id:
@@ -74,7 +82,7 @@ class UserManager(SNBaseManager):
         else:
             sql = self.insert_sql.format(self.object._name, self._sqlValues(self.insert_sql_values))
             print('/ok')
-        self.object.type = 2
+        self.object.type.id = 2
         print(sql)
         return self.executeSQL(sql)
 

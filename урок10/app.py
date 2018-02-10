@@ -185,20 +185,13 @@ def friends_view():
     friends = []
     friends_request = []
     friend_nickname = UserManager()
-    print('ok1')
-    print('ok2')
     for i in friend.object:
         friend_id = i.user2
         friend_nickname.get_user(friend_id)
         if i.block == 2 or i.block == 1:
-            print('/ok')
-            print(friend_nickname.object)
             friends_request.append(friend_nickname.object.nickname)
         else:
-            print('ok')
-            print(friend_nickname.object)
             friends.append(friend_nickname.object.nickname)
-        print(friends)
     context['friends_list'] = friends
     context['friends_request_list'] = friends_request
     return render_template('home.html', context = context)
@@ -233,12 +226,6 @@ def home():
         context['user'] = user
         context['loginUser'] = user
     return render_template('home.html', context=context)
-
-@app.route('/request_friend')
-@login_required
-def request_friend(user_id):
-    friend_request = True
-    return friends_view(friend_request)
 
 def addToSession(user):
     session['username'] = user.object.nickname
@@ -283,17 +270,17 @@ def registration():
         context['Error'].append('incorrect data')
     return render_template('registr.html', context=context)
 
-@app.route('/registr_group', methods=["GET", "POST"])
+@app.route('/registr_group', methods=["POST"])
 def registr_group():
-    context = {'Error': []}
     if request.method == 'POST':
+        context = {'Error': []}
         user = UserManager().getModelFromForm(request.form)
         print(user.object.nickname)
         if user.check_user():
             context['Error'].append('wrong Name or email')
         if context['Error']:
             return render_template('registration.html', context=context)
-        if user.save_group:
+        if user.save_group():
             print("ok")
             return redirect(url_for('home'))
 
@@ -321,9 +308,7 @@ def upload():
 
     return render_template("complete.html" , image_name = filename)
 
-@app.route('/upload/<filename>')
-def send_image(filename):
-    return send_from_directory("images" , filename)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5034)

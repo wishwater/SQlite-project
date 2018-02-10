@@ -4,14 +4,12 @@
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
+{{context.Error}}
 <div class="container-fluid">
 	<div class = "row">
         <div class = "col-lg-4"></div>
-		<div class = "col-lg-2">
-			{%block registr_user %}{% endblock %}
-		</div>
-        <div class = "col-lg-2">
-			{%block registr_group %}{% endblock %}
+		<div class = "col-lg-4">
+			{%block registr%}{%endblock%}
 		</div>
         <div class = "col-lg-4"></div>
     </div>
