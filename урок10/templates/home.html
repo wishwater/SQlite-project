@@ -50,8 +50,10 @@ tr:nth-child(even) {
 
 {% block mail %}
 
-<form action="/email">
-	<button type="submit" class="btn btn-info">Send</button>
+<form action="/email" method="GET">
+	<input name = "nickname" placeholder = "email">
+	<input name = "descr" placeholder = "Message">
+	<button type="submit" value = "submit" class="btn btn-info">Send</button>
 	</form>
 
 {% endblock %}
@@ -144,8 +146,7 @@ tr:nth-child(even) {
 
 {% block upload_picture%}
 {%if context.user.object.id == context.loginUser.object.id%}
-	<form method="GET" action="/find_friend">
-		<input type="name" class="form-control" name="friend_nickname" value="{{i}}" style="display:none">
-		<input type="submit" class="form-control" name="friend_nickname" value="{{i}}">
+	<form method="GET" action="/upload_files">
+		<input type="submit" class="form-control"  value="upload">
 {%endif%}
 {% endblock %}

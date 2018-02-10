@@ -35,9 +35,15 @@ mail = Mail(app)
 
 @app.route("/email")
 def email():
-    msg = Message("DA2",
-        sender="nikita.ogranchukggmail.com",
-        recipients=["hardanchukvasia@gmail.com"])
+    user = UserManager()
+    values = user.getModelFromForm(request.form)
+    message = values.object.descr
+    print(message)
+    recipient = values.object.nickname
+    print(recipient)
+    msg = Message(message,
+        sender="nikita.ogranchuk@gmail.com",
+        recipients=[recipient])
     mail.send(msg)
     return('ok')
 
@@ -277,20 +283,22 @@ def registration():
         context['Error'].append('incorrect data')
     return render_template('registr.html', context=context)
 
-#@app.route('/registration_group', methods=["GET", "POST"])
-#def registration():
-#    context = {'Error': []}
-#    if request.method == 'POST':
-#        user = UserManager().getModelFromForm(request.form)
-#        if user.check_user():
-#            context['Error'].append('wrong Name or email')
-#        if context['Error']:
-#            return render_template('registration.html', context=context)
-#        if user.save_group:
-#            return redirect(url_for('home'))
-#
-#        context['Error'].append('incorrect data')
-#    return render_template('registration.html', context=context)
+@app.route('/registr_group', methods=["GET", "POST"])
+def registr_group():
+    context = {'Error': []}
+    if request.method == 'POST':
+        user = UserManager().getModelFromForm(request.form)
+        print(user.object.nickname)
+        if user.check_user():
+            context['Error'].append('wrong Name or email')
+        if context['Error']:
+            return render_template('registration.html', context=context)
+        if user.save_group:
+            print("ok")
+            return redirect(url_for('home'))
+
+        context['Error'].append('incorrect data')
+    return render_template('registration.html', context=context)
 
 @app.route("/upload_files")
 def index():
